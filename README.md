@@ -1,4 +1,4 @@
-# KidQuest 🏆 — Gamified To-Do App for Children
+# Hero Mission  🏆 — Gamified To-Do App for Children
 
 A Flutter mobile application where children experience tasks as exciting game **missions**, earn **coins**, level up as **heroes**, and redeem **rewards** — all under their parent's watchful control.
 
