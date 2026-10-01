@@ -66,6 +66,11 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen> {
         ),
         actions: [
           IconButton(
+            icon: Icon(Icons.child_care, color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5)),
+            tooltip: AppStrings.get(context, 'iAmAChild'),
+            onPressed: () => Navigator.pushNamed(context, '/child-login'),
+          ),
+          IconButton(
             icon: Icon(Icons.settings, color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5)),
             tooltip: AppStrings.get(context, 'settings'),
             onPressed: () => Navigator.pushNamed(context, '/parent-settings'),
