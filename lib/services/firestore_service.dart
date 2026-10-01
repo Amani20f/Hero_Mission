@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../models/task_model.dart';
 import '../models/reward_model.dart';
 import '../models/progress_model.dart';
@@ -9,6 +10,10 @@ import '../core/utils/level_utils.dart';
 /// FirestoreService — CRUD operations for tasks, rewards, progress, and users
 class FirestoreService {
   FirebaseFirestore get _db => FirebaseFirestore.instance;
+
+  /// UID of the signed-in parent. Every query is scoped to it so that
+  /// Firestore security rules can guarantee a family only sees its own data.
+  String get _parentUid => FirebaseAuth.instance.currentUser?.uid ?? '';
 
   // ── Collections ───────────────────────────────────────────────────────────
 
@@ -32,17 +37,6 @@ class FirestoreService {
             .toList());
   }
 
-  /// Get ALL children across all parents (used on child login screen)
-  Stream<List<UserModel>> getAllChildrenStream() {
-    return _users
-        .where('role', isEqualTo: 'child')
-        .snapshots()
-        .map((snap) => snap.docs
-            .map((doc) =>
-                UserModel.fromMap(doc.data() as Map<String, dynamic>, doc.id))
-            .toList());
-  }
-
   Future<void> updateChildAvatar(String childId, int avatarIndex) async {
     await _users.doc(childId).update({'avatarIndex': avatarIndex});
   }
@@ -57,13 +51,19 @@ class FirestoreService {
     batch.delete(_progress.doc(childId));
 
     // 3. Delete tasks
-    final tasksSnap = await _tasks.where('childId', isEqualTo: childId).get();
+    final tasksSnap = await _tasks
+        .where('parentId', isEqualTo: _parentUid)
+        .where('childId', isEqualTo: childId)
+        .get();
     for (var doc in tasksSnap.docs) {
       batch.delete(doc.reference);
     }
 
     // 4. Delete rewards
-    final rewardsSnap = await _rewards.where('childId', isEqualTo: childId).get();
+    final rewardsSnap = await _rewards
+        .where('parentId', isEqualTo: _parentUid)
+        .where('childId', isEqualTo: childId)
+        .get();
     for (var doc in rewardsSnap.docs) {
       batch.delete(doc.reference);
     }
@@ -75,6 +75,7 @@ class FirestoreService {
 
   Stream<List<TaskModel>> getChildTasksStream(String childId) {
     return _tasks
+        .where('parentId', isEqualTo: _parentUid)
         .where('childId', isEqualTo: childId)
         // .orderBy('createdAt', descending: true)
         .snapshots()
@@ -183,6 +184,7 @@ class FirestoreService {
 
   Stream<List<RewardModel>> getRewardsStream(String childId) {
     return _rewards
+        .where('parentId', isEqualTo: _parentUid)
         .where('childId', isEqualTo: childId)
         .orderBy('createdAt', descending: false)
         .snapshots()
@@ -263,6 +265,7 @@ class FirestoreService {
 
   Stream<List<Map<String, dynamic>>> getRedemptionsStream(String childId) {
     return _redemptions
+        .where('parentId', isEqualTo: _parentUid)
         .where('childId', isEqualTo: childId)
         .orderBy('redeemedAt', descending: true)
         .snapshots()
