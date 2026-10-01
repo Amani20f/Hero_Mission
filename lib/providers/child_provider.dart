@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/user_model.dart';
 import '../services/firestore_service.dart';
 
-/// ChildProvider — manages list of children.
-/// - When parentId == 'all': fetches all children (used on child login screen)
-/// - When parentId is a real ID: fetches only that parent's children (parent dashboard)
+/// ChildProvider — manages the list of children of the signed-in parent.
 class ChildProvider extends ChangeNotifier {
   final FirestoreService _firestoreService = FirestoreService();
 
@@ -26,11 +24,8 @@ class ChildProvider extends ChangeNotifier {
     _isLoading = true;
     notifyListeners();
 
-    // 'all' → show every child (for child login screen)
-    // real parentId → show only this parent's children
-    final stream = parentId == 'all'
-        ? _firestoreService.getAllChildrenStream()
-        : _firestoreService.getChildrenByParent(parentId);
+    // Only this parent's children (never children of other families)
+    final stream = _firestoreService.getChildrenByParent(parentId);
 
     stream.listen(
       (children) {
