@@ -25,7 +25,16 @@ class _ChildLoginScreenState extends State<ChildLoginScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<ChildProvider>().listenToChildren('all'); 
+      final parent = context.read<AuthProvider>().parentUser;
+      if (parent == null) {
+        // A parent must be signed in on this device before a child can log in
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(AppStrings.get(context, 'parentLoginRequired'))),
+        );
+        Navigator.pop(context);
+        return;
+      }
+      context.read<ChildProvider>().listenToChildren(parent.id);
     });
   }
 
