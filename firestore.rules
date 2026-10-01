@@ -1,0 +1,42 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper: is the signed-in user the parent who owns this data?
+    function isParentOf(data) {
+      return request.auth != null && data.parentId == request.auth.uid;
+    }
+
+    // Users: a parent can see/edit their own profile and their children only
+    match /users/{userId} {
+      allow read, update, delete: if request.auth != null
+        && (request.auth.uid == userId || isParentOf(resource.data));
+      allow create: if request.auth != null
+        && (request.auth.uid == userId || isParentOf(request.resource.data));
+    }
+
+    // Tasks: only the parent who owns the task
+    match /tasks/{taskId} {
+      allow read, update, delete: if isParentOf(resource.data);
+      allow create: if isParentOf(request.resource.data);
+    }
+
+    // Rewards: only the parent who owns the reward
+    match /rewards/{rewardId} {
+      allow read, update, delete: if isParentOf(resource.data);
+      allow create: if isParentOf(request.resource.data);
+    }
+
+    // Redemptions: only the parent who owns them
+    match /redemptions/{id} {
+      allow read, update, delete: if isParentOf(resource.data);
+      allow create: if isParentOf(request.resource.data);
+    }
+
+    // Progress: only the parent of that child
+    match /progress/{childId} {
+      allow read, write: if request.auth != null
+        && get(/databases/$(database)/documents/users/$(childId)).data.parentId == request.auth.uid;
+    }
+  }
+}
