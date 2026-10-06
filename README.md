@@ -1,38 +1,38 @@
-# Hero Mission  🏆 — Gamified To-Do App for Children
+# Hero Mission — Gamified To-Do App for Children
 
 A Flutter mobile application where children experience tasks as exciting game **missions**, earn **coins**, level up as **heroes**, and redeem **rewards** — all under their parent's watchful control.
 
-> 👥 Team project built by a team of 5 · Flutter · Firebase
+> Team project built by a team of 5 · Flutter · Firebase
 
 ---
 
-## 📸 Screenshots
+## Screenshots
 
 ![Hero Mission screens](hero-mission-screens.png)
 
 ---
 
-## ✨ Features
+## Features
 
 ### For Children (Game Experience)
-- 🎮 **Mission-style tasks** — colorful gradient cards with status badges
-- 🪙 **Coin rewards** — animated counter that bounces when you earn coins  
-- ⭐ **XP & Levels** — 10 levels from Newbie to Grand Master
-- 🔥 **Daily streaks** — tracked automatically each day
-- 🏅 **Badges** — 7 unlockable achievements
-- 🎁 **Rewards Shop** — redeem coins for parent-defined rewards
-- 🎉 **Celebration screen** — full confetti burst on mission completion
-- 🧑‍🎤 **Avatar selector** — 8 built-in cartoon animal avatars
+- **Mission-style tasks** — colorful gradient cards with status badges
+- **Coin rewards** — animated counter that bounces when you earn coins  
+- **XP & Levels** — 10 levels from Newbie to Grand Master
+- **Daily streaks** — tracked automatically each day
+- **Badges** — 7 unlockable achievements
+- **Rewards Shop** — redeem coins for parent-defined rewards
+- **Celebration screen** — full confetti burst on mission completion
+- **Avatar selector** — 8 built-in cartoon animal avatars
 
 ### For Parents (Clean & Professional)
-- 👨‍👩‍👧‍👦 **Dashboard** — children overview with XP bars, coins, and streaks
-- ⚔️ **Mission creator** — title, description, coin reward (slider), deadline, child assignment
-- ✅ **Approval system** — approve or reject completed missions
-- 📊 **Progress viewer** — detailed stats and badge overview per child
+- **Dashboard** — children overview with XP bars, coins, and streaks
+- **Mission creator** — title, description, coin reward (slider), deadline, child assignment
+- **Approval system** — approve or reject completed missions
+- **Progress viewer** — detailed stats and badge overview per child
 
 ---
 
-## 🚀 Firebase Setup (Required)
+## Firebase Setup (Required)
 
 ### Step 1 — Create Firebase Project
 1. Go to [console.firebase.google.com](https://console.firebase.google.com)
@@ -68,7 +68,7 @@ flutterfire configure
 
 ---
 
-## 🗄️ Firestore Data Structure
+## Firestore Data Structure
 
 ```
 users/{userId}
@@ -123,7 +123,7 @@ Add these composite indexes in Firebase Console:
 
 ---
 
-## 🏗️ Project Structure
+## Project Structure
 
 ```
 lib/
@@ -186,7 +186,7 @@ lib/
 
 ---
 
-## ▶️ Running the App
+## Running the App
 
 ```bash
 # Install dependencies
@@ -195,13 +195,16 @@ flutter pub get
 # Run on connected device/emulator
 flutter run
 
+# Run on Chrome (fixed port required for Google Sign-In)
+flutter run -d chrome --web-port=5000
+
 # Build debug APK
 flutter build apk --debug
 ```
 
 ---
 
-## 🎮 Gamification System
+## Gamification System
 
 | Mechanic | Details |
 |---|---|
@@ -213,7 +216,7 @@ flutter build apk --debug
 
 ---
 
-## 🎨 Design System
+## Design System
 
 ### Child Theme (Dark Game Mode)
 - Font: **Nunito** (rounded, playful)
@@ -230,41 +233,24 @@ flutter build apk --debug
 
 ---
 
-## 🔐 Security Notes
+## Security
 
-Before going to production, update Firestore Security Rules:
-```javascript
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    match /users/{userId} {
-      allow read: if request.auth != null;
-      allow write: if request.auth.uid == userId;
-    }
-    match /tasks/{taskId} {
-      allow read: if request.auth != null;
-      allow write: if request.auth != null;
-    }
-    match /rewards/{rewardId} {
-      allow read, write: if request.auth != null;
-    }
-    match /progress/{childId} {
-      allow read, write: if request.auth != null;
-    }
-  }
-}
-```
+Firestore access is restricted so that **each parent can only read and write their own family's data** (children, tasks, rewards, redemptions, and progress).
+
+- Security rules live in [`firestore.rules`](firestore.rules) — publish them from **Firebase Console → Firestore Database → Rules**.
+- Every Firestore query in the app is scoped to the signed-in parent's `parentId`.
+- A child can only log in on a device where a parent is already signed in.
 
 ---
 
-## 👩‍💻 My Role
+## My Role
 
 This is a team project built by a team of 5. I worked on every part of the app:
 - **UI & screens:** child game-mode screens and parent dashboard in Flutter
 - **Gamification logic:** missions, coins, XP levels, streaks, badges, and rewards
 - **Firebase:** authentication, Firestore data structure, and security rules
 
-## 👥 Team
+## Team
 - Amani Rabeea — [@Amani20f](https://github.com/Amani20f)
 - Noor Abdullah — [@noorbam](https://github.com/noorbam)
 - Nora Omar
