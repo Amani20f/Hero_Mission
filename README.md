@@ -2,6 +2,14 @@
 
 A Flutter mobile application where children experience tasks as exciting game **missions**, earn **coins**, level up as **heroes**, and redeem **rewards** — all under their parent's watchful control.
 
+> 👥 Team project built by a team of 5 · Flutter · Firebase
+
+---
+
+## 📸 Screenshots
+
+![Hero Mission screens](hero-mission-screens.png)
+
 ---
 
 ## ✨ Features
@@ -257,11 +265,11 @@ This is a team project built by a team of 5. I worked on every part of the app:
 - **Firebase:** authentication, Firestore data structure, and security rules
 
 ## 👥 Team
-- Amani Rabea Ban Makashen — [@Amani20f](https://github.com/Amani20f)
-- Noor — [@noorbam](https://github.com/noorbam)
-- Noura
-- Raghad
-- Hanan
+- Amani Rabeea — [@Amani20f](https://github.com/Amani20f)
+- Noor Abdullah — [@noorbam](https://github.com/noorbam)
+- Nora Omar
+- Hanan Omar
+- Raghad Akram
 
 > Original repository: [noorbam/Hero_Mission](https://github.com/noorbam/Hero_Mission)
 
