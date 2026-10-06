@@ -251,14 +251,17 @@ service cloud.firestore {
 
 ## 👩‍💻 My Role
 
-This is a team project built together with [@noorbam](https://github.com/noorbam). I worked on every part of the app:
+This is a team project built by a team of 5. I worked on every part of the app:
 - **UI & screens:** child game-mode screens and parent dashboard in Flutter
 - **Gamification logic:** missions, coins, XP levels, streaks, badges, and rewards
 - **Firebase:** authentication, Firestore data structure, and security rules
 
 ## 👥 Team
 - Amani Rabea Ban Makashen — [@Amani20f](https://github.com/Amani20f)
-- [@noorbam](https://github.com/noorbam)
+- Noor — [@noorbam](https://github.com/noorbam)
+- Noura
+- Raghad
+- Hanan
 
 > Original repository: [noorbam/Hero_Mission](https://github.com/noorbam/Hero_Mission)
 
